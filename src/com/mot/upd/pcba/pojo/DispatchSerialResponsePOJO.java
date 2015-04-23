@@ -12,7 +12,7 @@ public class DispatchSerialResponsePOJO {
 	private String mascID;
 	private String gppdID;
 	private String requestType;
-	private String responseCode;
+	private int responseCode;
 	private String responseMsg;
 	private String rsdID;
 	
@@ -73,11 +73,11 @@ public String getNewSerialNo() {
 		this.requestType = requestType;
 	}
 
-	public String getResponseCode() {
+	public int getResponseCode() {
 		return responseCode;
 	}
 
-	public void setResponseCode(String responseCode) {
+	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
 
