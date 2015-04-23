@@ -7,7 +7,7 @@ public ServiceMessageCodes(){
 	}
 	
 	//Codes for dispatch serial no
-		public static final int SUCCESS=5000;
+		public static final int SUCCESS=0000;
 		public static final int NO_NEW_SERIAL_NO_AVAILABLE=5001;
 		public static final int INVALID_REQUEST_TYPE=5002;
 		public static final int INVALID_BUILD_TYPE=5003;
