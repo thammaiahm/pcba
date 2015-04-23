@@ -1,8 +1,12 @@
 package com.mot.upd.pcba.restwebservice;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+
+import com.mot.upd.pcba.pojo.DispatchSerialRequestPOJO;
 
 
 
@@ -10,16 +14,18 @@ import javax.ws.rs.Produces;
  * @author Quinnox Dev Team
  *
  */
-@Path("/pcba")
+@Path("/dispatchserialNumber")
 
 public class UPDDispatchSerialRestWebservice {
 	
 	
-	@GET
+	@POST
 	@Produces("application/json")
-	public String doGetSerialNumber() {
-	    
-		return "Successfully created first webservice";
+	@Consumes("application/json")
+	public Response  doGetSerialNumber(DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
+		
+	    //
+		return Response.status(201).entity(dispatchSerialRequestPOJO).build();
 	}
 
 }
