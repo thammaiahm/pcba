@@ -5,8 +5,9 @@ public class ServiceMessageCodes {
 public ServiceMessageCodes(){
 		
 	}
-	
+	// Thammaiah added
 	//Codes for dispatch serial no
+
 		public static final int SUCCESS=0000;
 		public static final int NO_NEW_SERIAL_NO_AVAILABLE=5001;
 		public static final int INVALID_REQUEST_TYPE=5002;
@@ -17,7 +18,16 @@ public ServiceMessageCodes(){
 		public static final int NEW_SERIAL_NO_AVAILABLE=5007;
 		public static final int NEW_ULMA_AVAILABLE=5008;
 		
+	//Viswanath added 
 		
+		public static final int MEID_SUCCESS=5009;
+		public static final int MEID_FAILURE=5010;
+		public static final int INVALID_STATUS=5011;
+		public static final int	NO_LOCK_CODE_FOUND=5012;
+		public static final int OLD_SERIAL_NO_NOT_FOUND=5013;
+		public static final int NEW_SERIAL_NO_NOT_FOUND=5014;	
+		
+	// Thammaiah added	
 	//Messages for dispatch serial no WS
        public static final String OPERATION_SUCCESS="Operation Success";
        public static final String NO_SERIAL_NO_AVAILABLE_FOR_DISPATCH_MSG="No New Serial number available for Dispatch";
@@ -28,6 +38,15 @@ public ServiceMessageCodes(){
        public static final String NO_ULMA_AVAILABLE_MSG="No ULMA Available For Dispatch";
        public static final String NEW_ULMA_AVAILABLE_MSG="New ULMA Available For Dispatch";
        public static final String SERIAL_NO_AVAILABLE_FOR_DISPATCH_MSG="New Serial number available for Dispatch";
+       
+   //Viswanath added
+       
+       public static final String MEID_SUCCES_MSG="MEID Success";
+       public static final String MEID_FAILURE_MSG="MEID Failure";
+       public static final String INVALID_STATUS_MSG="Invalid Status";
+       public static final String NO_LOCK_CODE_DETAILS_FOUND_MSG="No Lock Code Details Found";
+	   public static final String OLD_SERIAL_NO_NOT_FOUND_MSG="Old Serial No Not Found";
+	   public static final String NEW_SERIAL_NO_NOT_FOUND_MSG="New Serial No Found";	
             
 
 }
