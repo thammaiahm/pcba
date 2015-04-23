@@ -17,6 +17,7 @@ public ServiceMessageCodes(){
 		public static final int NO_ULMA_AVAILABLE=5006;
 		public static final int NEW_SERIAL_NO_AVAILABLE=5007;
 		public static final int NEW_ULMA_AVAILABLE=5008;
+		public static final int INVALID_SN_TYPE=5015;
 		
 	//Viswanath added 
 		
@@ -34,10 +35,11 @@ public ServiceMessageCodes(){
        public static final String INVALID_REQUEST_TYPE_MSG="Request type Value must be V or D";
        public static final String INVALID_BUILD_TYPE_MSG="Build type Value must be PROD";
        public static final String SERIAL_NO_NOT_VALID_MSG="Serial number not valid";
-       public static final String SN_MISSING_ERROR="Following Fields are mandatory- Serial Number,Build type,Request-type,RSD id,MASC ID.Please re-enter and try again.";
+       public static final String INPUT_PARAM_MISSING_MSG="Following Fields are mandatory- Serial Number,Build type,Request-type,RSD id,MASC ID.Please re-enter and try again.";
        public static final String NO_ULMA_AVAILABLE_MSG="No ULMA Available For Dispatch";
        public static final String NEW_ULMA_AVAILABLE_MSG="New ULMA Available For Dispatch";
        public static final String SERIAL_NO_AVAILABLE_FOR_DISPATCH_MSG="New Serial number available for Dispatch";
+       public static final String INVALID_SN_TYPE_MSG="Serial number type should be either MEID or IMEI";
        
    //Viswanath added
        
