@@ -75,7 +75,7 @@ public class UPDDispatchSerialRestWebservice {
 	private boolean validateBuildType(
 			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
 		// TODO Auto-generated method stub
-		if(dispatchSerialRequestPOJO.getRequestType().trim().equals(PCBADataDictionary.BUILD_TYPE1) || dispatchSerialRequestPOJO.getRequestType().trim().equals(PCBADataDictionary.BUILD_TYPE2))
+		if(dispatchSerialRequestPOJO.getBuildType().trim().equals(PCBADataDictionary.BUILD_TYPE1) || dispatchSerialRequestPOJO.getBuildType().trim().equals(PCBADataDictionary.BUILD_TYPE2))
 		{
 			return true;
 		}
@@ -87,7 +87,7 @@ public class UPDDispatchSerialRestWebservice {
 	private boolean validateSNType(
 			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
 		// TODO Auto-generated method stub
-		if(dispatchSerialRequestPOJO.getRequestType().trim().equals(PCBADataDictionary.IMEI) || dispatchSerialRequestPOJO.getRequestType().trim().equals(PCBADataDictionary.MEID))
+		if(dispatchSerialRequestPOJO.getSnRequestType().trim().equals(PCBADataDictionary.IMEI) || dispatchSerialRequestPOJO.getSnRequestType().trim().equals(PCBADataDictionary.MEID))
 		{
 			return true;
 		}
