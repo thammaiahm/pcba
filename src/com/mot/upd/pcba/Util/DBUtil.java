@@ -4,6 +4,7 @@
 package com.mot.upd.pcba.Util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -68,11 +69,11 @@ public class DBUtil {
 			e.printStackTrace();
 		}
 	}
-	public static void closeConnection(Connection con,Statement stmt){
+	public static void closeConnection(Connection con,PreparedStatement preparedStmt){
 		logger.info("DBUtil Inside  closeConnection method inside.");
 		try {
-			if (stmt != null) {
-				stmt.close();
+			if (preparedStmt != null) {
+				preparedStmt.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
