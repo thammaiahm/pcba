@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 
 import com.mot.upd.pcba.constants.PCBADataDictionary;
 import com.mot.upd.pcba.constants.ServiceMessageCodes;
+import com.mot.upd.pcba.dao.DispatchSerialNumberDAO;
 import com.mot.upd.pcba.pojo.DispatchSerialRequestPOJO;
 import com.mot.upd.pcba.pojo.DispatchSerialResponsePOJO;
 
@@ -68,6 +69,13 @@ public class UPDDispatchSerialRestWebservice {
 			dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.INVALID_BUILD_TYPE_MSG);
 			return Response.status(200).entity(dispatchSerialResponsePOJO).build();
 		}
+		
+		/*
+		 * FOR ORACLE:if request type is IMEI check for protocol and query
+		 */
+		DispatchSerialNumberDAO dispatchSerialNumberDAO = new DispatchSerialNumberDAO();
+		dispatchSerialResponsePOJO=dispatchSerialNumberDAO.dispatchSerialNumber(dispatchSerialRequestPOJO);
+		
 		
 		return Response.status(201).entity(dispatchSerialResponsePOJO).build();
 	}
