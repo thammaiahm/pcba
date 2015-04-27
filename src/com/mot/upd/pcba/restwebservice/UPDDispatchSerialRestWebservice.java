@@ -12,115 +12,179 @@ import com.mot.upd.pcba.dao.DispatchSerialNumberDAO;
 import com.mot.upd.pcba.pojo.DispatchSerialRequestPOJO;
 import com.mot.upd.pcba.pojo.DispatchSerialResponsePOJO;
 
-
-
 /**
  * @author Quinnox Dev Team
  *
  */
 @Path("/dispatchserialNumber")
-
 public class UPDDispatchSerialRestWebservice {
-	
-	
+
 	@POST
 	@Produces("application/json")
 	@Consumes("application/json")
-	public Response  doGetSerialNumber(DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
-		
+	public Response doGetSerialNumber(
+			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
+
 		DispatchSerialResponsePOJO dispatchSerialResponsePOJO = new DispatchSerialResponsePOJO();
-		boolean isMissing=false;
-		boolean isValidRequest=false;
-		boolean isValidSerial=false;
-		boolean isValidBuildType=false;
-	    //Check for Mandatory Fields in input
-		isMissing =validateMandatoryInputParam(dispatchSerialRequestPOJO);
-		if(isMissing)
-		{
-			
-			dispatchSerialResponsePOJO.setResponseCode(ServiceMessageCodes.INPUT_PARAM_MISSING);
-			dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.INPUT_PARAM_MISSING_MSG);
-			return Response.status(200).entity(dispatchSerialResponsePOJO).build();
+		boolean isMissing = false;
+		boolean isValidRequest = false;
+		boolean isValidSerial = false;
+		boolean isValidBuildType = false;
+		// Check for Mandatory Fields in input
+		isMissing = validateMandatoryInputParam(dispatchSerialRequestPOJO);
+		if (isMissing) {
+
+			dispatchSerialResponsePOJO
+					.setResponseCode(ServiceMessageCodes.INPUT_PARAM_MISSING);
+			dispatchSerialResponsePOJO
+					.setResponseMsg(ServiceMessageCodes.INPUT_PARAM_MISSING_MSG);
+			return Response.status(200).entity(dispatchSerialResponsePOJO)
+					.build();
 		}
-		
-		//check if request type is valid
-		isValidRequest=validateRequestType(dispatchSerialRequestPOJO);
-		if(!isValidRequest)
-		{
-			dispatchSerialResponsePOJO.setResponseCode(ServiceMessageCodes.INVALID_REQUEST_TYPE);
-			dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.INVALID_REQUEST_TYPE_MSG);
-			return Response.status(200).entity(dispatchSerialResponsePOJO).build();
+
+		// check if request type is valid
+		isValidRequest = validateRequestType(dispatchSerialRequestPOJO);
+		if (!isValidRequest) {
+			dispatchSerialResponsePOJO
+					.setResponseCode(ServiceMessageCodes.INVALID_REQUEST_TYPE);
+			dispatchSerialResponsePOJO
+					.setResponseMsg(ServiceMessageCodes.INVALID_REQUEST_TYPE_MSG);
+			return Response.status(200).entity(dispatchSerialResponsePOJO)
+					.build();
 		}
-		
-		//check if sn type is valid
-		isValidSerial=validateSNType(dispatchSerialRequestPOJO);
-		if(!isValidSerial)
-		{
-			dispatchSerialResponsePOJO.setResponseCode(ServiceMessageCodes.INVALID_SN_TYPE);
-			dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.INVALID_SN_TYPE_MSG);
-			return Response.status(200).entity(dispatchSerialResponsePOJO).build();
+
+		// check if sn type is valid
+		isValidSerial = validateSNType(dispatchSerialRequestPOJO);
+		if (!isValidSerial) {
+			dispatchSerialResponsePOJO
+					.setResponseCode(ServiceMessageCodes.INVALID_SN_TYPE);
+			dispatchSerialResponsePOJO
+					.setResponseMsg(ServiceMessageCodes.INVALID_SN_TYPE_MSG);
+			return Response.status(200).entity(dispatchSerialResponsePOJO)
+					.build();
 		}
-		
-		//check if build type is valid
-		isValidBuildType=validateBuildType(dispatchSerialRequestPOJO);
-		if(!isValidBuildType)
-		{
-			dispatchSerialResponsePOJO.setResponseCode(ServiceMessageCodes.INVALID_BUILD_TYPE);
-			dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.INVALID_BUILD_TYPE_MSG);
-			return Response.status(200).entity(dispatchSerialResponsePOJO).build();
+
+		// check if build type is valid
+		isValidBuildType = validateBuildType(dispatchSerialRequestPOJO);
+		if (!isValidBuildType) {
+			dispatchSerialResponsePOJO
+					.setResponseCode(ServiceMessageCodes.INVALID_BUILD_TYPE);
+			dispatchSerialResponsePOJO
+					.setResponseMsg(ServiceMessageCodes.INVALID_BUILD_TYPE_MSG);
+			return Response.status(200).entity(dispatchSerialResponsePOJO)
+					.build();
 		}
-		
+
 		/*
 		 * FOR ORACLE:if request type is IMEI check for protocol and query
 		 */
 		DispatchSerialNumberDAO dispatchSerialNumberDAO = new DispatchSerialNumberDAO();
-		dispatchSerialResponsePOJO=dispatchSerialNumberDAO.dispatchSerialNumber(dispatchSerialRequestPOJO);
+
+		// If IMEI
+		if (dispatchSerialRequestPOJO.getSnRequestType().trim()
+				.equals(PCBADataDictionary.IMEI)) {
+			
+			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_DISPATCH)
+			{
+			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+					.dispatchSerialNumberIMEI(dispatchSerialRequestPOJO);
+			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+					.getULMAAddress(dispatchSerialRequestPOJO,
+							dispatchSerialResponsePOJO);
+			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+					.updateDispatchStatusIMEI(dispatchSerialRequestPOJO,
+							dispatchSerialResponsePOJO);
+			}
+			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_VALIDATE)
+			{
+				dispatchSerialResponsePOJO=dispatchSerialNumberDAO.validateSerialNumberIMEI(dispatchSerialRequestPOJO);
+			}
+		}
+		if (dispatchSerialRequestPOJO.getSnRequestType().trim()
+				.equals(PCBADataDictionary.MEID)) {
+			
+			//Check if protocol is present
+			if(dispatchSerialRequestPOJO.getProtocol()==null)
+			{
+				dispatchSerialResponsePOJO.setResponseCode(ServiceMessageCodes.NO_PROTOCOL_FOUND);
+				dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.NO_PROTOCOL_FOUND_MSG);
+				return Response.status(200).entity(dispatchSerialResponsePOJO).build();
+			}
+			
+			
+			
+			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_DISPATCH)
+			{
+			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+					.dispatchSerialNumberMEID(dispatchSerialRequestPOJO);
+			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+					.updateDispatchStatusMEID(dispatchSerialRequestPOJO,
+							dispatchSerialResponsePOJO);
+			}
+			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_VALIDATE)
+			{
+				dispatchSerialResponsePOJO=dispatchSerialNumberDAO.validateSerialNumberIMEI(dispatchSerialRequestPOJO);
+			}
+		}
 		
-		
+
 		return Response.status(201).entity(dispatchSerialResponsePOJO).build();
 	}
 
 	private boolean validateBuildType(
 			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
 		// TODO Auto-generated method stub
-		if(dispatchSerialRequestPOJO.getBuildType().trim().equals(PCBADataDictionary.BUILD_TYPE1) || dispatchSerialRequestPOJO.getBuildType().trim().equals(PCBADataDictionary.BUILD_TYPE2))
-		{
+		if (dispatchSerialRequestPOJO.getBuildType().trim()
+				.equals(PCBADataDictionary.BUILD_TYPE1)
+				|| dispatchSerialRequestPOJO.getBuildType().trim()
+						.equals(PCBADataDictionary.BUILD_TYPE2)) {
 			return true;
 		}
-			
+
 		return false;
-		
+
 	}
 
 	private boolean validateSNType(
 			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
 		// TODO Auto-generated method stub
-		if(dispatchSerialRequestPOJO.getSnRequestType().trim().equals(PCBADataDictionary.IMEI) || dispatchSerialRequestPOJO.getSnRequestType().trim().equals(PCBADataDictionary.MEID))
-		{
+		if (dispatchSerialRequestPOJO.getSnRequestType().trim()
+				.equals(PCBADataDictionary.IMEI)
+				|| dispatchSerialRequestPOJO.getSnRequestType().trim()
+						.equals(PCBADataDictionary.MEID)) {
 			return true;
 		}
-			
+
 		return false;
-		
+
 	}
 
 	private boolean validateRequestType(
 			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
 		// TODO Auto-generated method stub
-		if(dispatchSerialRequestPOJO.getRequestType().trim().equals(PCBADataDictionary.REQUEST_VALIDATE) || dispatchSerialRequestPOJO.getRequestType().trim().equals(PCBADataDictionary.REQUEST_DISPATCH))
-		{
+		if (dispatchSerialRequestPOJO.getRequestType().trim()
+				.equals(PCBADataDictionary.REQUEST_VALIDATE)
+				|| dispatchSerialRequestPOJO.getRequestType().trim()
+						.equals(PCBADataDictionary.REQUEST_DISPATCH)) {
 			return true;
 		}
-			
+
 		return false;
 	}
 
 	private boolean validateMandatoryInputParam(
 			DispatchSerialRequestPOJO dispatchSerialRequestPOJO) {
 		// TODO Auto-generated method stub
-		
-		if(dispatchSerialRequestPOJO.getCustomer()==null || dispatchSerialRequestPOJO.getRequestType()==null || dispatchSerialRequestPOJO.getSnRequestType()==null || dispatchSerialRequestPOJO.getNumberOfUlma()==0 || dispatchSerialRequestPOJO.getGppdID()==null || dispatchSerialRequestPOJO.getMascID()==null || dispatchSerialRequestPOJO.getRsdID()==null || dispatchSerialRequestPOJO.getBuildType()==null || dispatchSerialRequestPOJO.getTrackID()==null)
-		{
+
+		if (dispatchSerialRequestPOJO.getCustomer() == null
+				|| dispatchSerialRequestPOJO.getRequestType() == null
+				|| dispatchSerialRequestPOJO.getSnRequestType() == null
+				|| dispatchSerialRequestPOJO.getNumberOfUlma() == 0
+				|| dispatchSerialRequestPOJO.getGppdID() == null
+				|| dispatchSerialRequestPOJO.getMascID() == null
+				|| dispatchSerialRequestPOJO.getRsdID() == null
+				|| dispatchSerialRequestPOJO.getBuildType() == null
+				|| dispatchSerialRequestPOJO.getTrackID() == null) {
 			return true;
 
 		}
