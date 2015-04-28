@@ -1,10 +1,11 @@
 package com.mot.upd.pcba.pojo;
+
 /**
  * Author Thammaiah M B
  */
 
 public class DispatchSerialResponsePOJO {
-	
+
 	private String newSerialNo;
 	private String buildType;
 	private String customer;
@@ -15,9 +16,8 @@ public class DispatchSerialResponsePOJO {
 	private int responseCode;
 	private String responseMsg;
 	private String rsdID;
-	
 
-public String getNewSerialNo() {
+	public String getNewSerialNo() {
 		return newSerialNo;
 	}
 
@@ -97,8 +97,17 @@ public String getNewSerialNo() {
 		this.rsdID = rsdID;
 	}
 
-
-
-	
+	public void reset() {
+		newSerialNo = null;
+		buildType = null;
+		customer = null;
+		dispatchedDate = null;
+		mascID = null;
+		gppdID = null;
+		requestType = null;
+		responseCode = 0;
+		responseMsg = null;
+		rsdID = null;
+	}
 
 }
