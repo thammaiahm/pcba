@@ -83,50 +83,83 @@ public class UPDDispatchSerialRestWebservice {
 		// If IMEI
 		if (dispatchSerialRequestPOJO.getSnRequestType().trim()
 				.equals(PCBADataDictionary.IMEI)) {
-			
-			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_DISPATCH)
-			{
-			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
-					.dispatchSerialNumberIMEI(dispatchSerialRequestPOJO);
-			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
-					.getULMAAddress(dispatchSerialRequestPOJO,
-							dispatchSerialResponsePOJO);
-			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
-					.updateDispatchStatusIMEI(dispatchSerialRequestPOJO,
-							dispatchSerialResponsePOJO);
+
+			if (dispatchSerialRequestPOJO.getRequestType().trim()
+					.equals(PCBADataDictionary.REQUEST_DISPATCH)) {
+				dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+						.dispatchSerialNumberIMEI(dispatchSerialRequestPOJO);
+				if (dispatchSerialResponsePOJO.getResponseCode() == ServiceMessageCodes.NEW_SERIAL_NO_NOT_FOUND
+						|| dispatchSerialResponsePOJO.getResponseCode() == ServiceMessageCodes.SQL_EXCEPTION) {
+					return Response.status(200)
+							.entity(dispatchSerialResponsePOJO).build();
+				}
+				// If ULMA address not available return response
+				/*
+				 * dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+				 * .getULMAAddress(dispatchSerialRequestPOJO,
+				 * dispatchSerialResponsePOJO);
+				 */
+
+				dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+						.updateDispatchStatusIMEI(dispatchSerialRequestPOJO,
+								dispatchSerialResponsePOJO);
 			}
-			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_VALIDATE)
-			{
-				dispatchSerialResponsePOJO=dispatchSerialNumberDAO.validateSerialNumberIMEI(dispatchSerialRequestPOJO);
+
+			// Tested
+			if (dispatchSerialRequestPOJO.getRequestType().trim()
+					.equals(PCBADataDictionary.REQUEST_VALIDATE)) {
+				dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+						.validateSerialNumberIMEI(dispatchSerialRequestPOJO);
 			}
 		}
+		/*
+		 * End Checking for IMEI
+		 */
+
+		/*
+		 * FOR ORACLE:MEID
+		 */
 		if (dispatchSerialRequestPOJO.getSnRequestType().trim()
 				.equals(PCBADataDictionary.MEID)) {
-			
-			//Check if protocol is present
-			if(dispatchSerialRequestPOJO.getProtocol()==null)
-			{
-				dispatchSerialResponsePOJO.setResponseCode(ServiceMessageCodes.NO_PROTOCOL_FOUND);
-				dispatchSerialResponsePOJO.setResponseMsg(ServiceMessageCodes.NO_PROTOCOL_FOUND_MSG);
-				return Response.status(200).entity(dispatchSerialResponsePOJO).build();
+
+			// Check if protocol is present
+			// Tested
+			if (dispatchSerialRequestPOJO.getProtocol() == null
+					|| dispatchSerialRequestPOJO.getProtocol() == "") {
+				dispatchSerialResponsePOJO
+						.setResponseCode(ServiceMessageCodes.NO_PROTOCOL_FOUND);
+				dispatchSerialResponsePOJO
+						.setResponseMsg(ServiceMessageCodes.NO_PROTOCOL_FOUND_MSG);
+				return Response.status(200).entity(dispatchSerialResponsePOJO)
+						.build();
 			}
-			
-			
-			
-			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_DISPATCH)
-			{
-			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
-					.dispatchSerialNumberMEID(dispatchSerialRequestPOJO);
-			dispatchSerialResponsePOJO = dispatchSerialNumberDAO
-					.updateDispatchStatusMEID(dispatchSerialRequestPOJO,
-							dispatchSerialResponsePOJO);
+
+			if (dispatchSerialRequestPOJO.getRequestType().trim()
+					.equals(PCBADataDictionary.REQUEST_DISPATCH)) {
+
+				dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+						.dispatchSerialNumberMEID(dispatchSerialRequestPOJO);
+				if (dispatchSerialResponsePOJO.getResponseCode() == ServiceMessageCodes.NEW_SERIAL_NO_NOT_FOUND
+						|| dispatchSerialResponsePOJO.getResponseCode() == ServiceMessageCodes.SQL_EXCEPTION) {
+					return Response.status(200)
+							.entity(dispatchSerialResponsePOJO).build();
+				}
+				dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+						.updateDispatchStatusMEID(dispatchSerialRequestPOJO,
+								dispatchSerialResponsePOJO);
+
 			}
-			if(dispatchSerialRequestPOJO.getRequestType()==PCBADataDictionary.REQUEST_VALIDATE)
-			{
-				dispatchSerialResponsePOJO=dispatchSerialNumberDAO.validateSerialNumberIMEI(dispatchSerialRequestPOJO);
+
+			if (dispatchSerialRequestPOJO.getRequestType().trim()
+					.equals(PCBADataDictionary.REQUEST_VALIDATE)) {
+
+				dispatchSerialResponsePOJO = dispatchSerialNumberDAO
+						.validateSerialNumberIMEI(dispatchSerialRequestPOJO);
 			}
 		}
-		
+		/*
+		 * End Checking for MEID
+		 */
 
 		return Response.status(201).entity(dispatchSerialResponsePOJO).build();
 	}
