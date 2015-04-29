@@ -1,11 +1,14 @@
 package com.mot.upd.pcba.pojo;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  * Author Thammaiah M B
  */
 
 public class DispatchSerialResponsePOJO {
-
+	
 	private String newSerialNo;
 	private String buildType;
 	private String customer;
@@ -16,8 +19,10 @@ public class DispatchSerialResponsePOJO {
 	private int responseCode;
 	private String responseMsg;
 	private String rsdID;
+	private List<String> ulmaAddress = new ArrayList<String>();
+	
 
-	public String getNewSerialNo() {
+public String getNewSerialNo() {
 		return newSerialNo;
 	}
 
@@ -108,6 +113,17 @@ public class DispatchSerialResponsePOJO {
 		responseCode = 0;
 		responseMsg = null;
 		rsdID = null;
+		ulmaAddress=null;
 	}
+
+	public List<String> getUlmaAddress() {
+		return ulmaAddress;
+	}
+
+	public void setUlmaAddress(List<String> ulmaAddress) {
+		this.ulmaAddress = ulmaAddress;
+	}
+
+	
 
 }
